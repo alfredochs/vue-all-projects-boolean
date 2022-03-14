@@ -1,18 +1,20 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
+    <!-- <div id="nav">
+      <router-link to="/">Home</router-link> 
       <router-link to="/boolflix">Boolflix</router-link>
       <router-link to="/slider">Slider</router-link>
       <router-link to="/dischi">Dischi</router-link>
-    </div>
+    </div> -->
+    <navbar></navbar>
     <router-view />
   </div>
 </template>
 <script>
+import Navbar from "./components/partials/Navbar.vue";
 export default {
   name: "App",
-  components: {},
+  components: { Navbar },
 };
 </script>
 

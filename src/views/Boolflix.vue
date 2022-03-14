@@ -1,12 +1,23 @@
 <template>
   <div class="container-fluid">
     <div class="container">
-      <input
-        type="text"
-        v-model="testoDaRicercare"
-        @keydown.enter="stampaRisultati"
-      />
-      <button @click="stampaRisultati">Stampa Risultati</button>
+      <!-- Search -->
+      <div class="d-flex">
+        <input
+          class="form-control me-2"
+          placeholder="Search"
+          type="text"
+          v-model="testoDaRicercare"
+          @keydown.enter="stampaRisultati"
+        />
+        <button class="btn btn-outline-dark" @click="stampaRisultati">
+          Cerca
+        </button>
+      </div>
+      <!-- Latest Movies -->
+      <popular-movies
+        v-if="movies.length == 0 && series.length == 0"
+      ></popular-movies>
       <!-- Movies -->
       <div v-if="movies.length > 0">
         <h3>Movies</h3>
@@ -18,16 +29,8 @@
           ></card>
         </div>
       </div>
-      <!-- <div>
-        <a href="#" @click="stampaListaAttori">Stampa Lista Attori</a>
-        <ul class="list-unstyled">
-          <li class="" v-for="(attore, i) in cast.slice(0, 5)" :key="i">
-            {{ attore.name }}
-          </li>
-        </ul>
-      </div> -->
       <!-- Series -->
-      <!-- <div>
+      <div v-if="series.length > 0">
         <h3>Series</h3>
         <div class="row row-cols-4 flex-nowrap overflow-auto g-0">
           <card
@@ -36,7 +39,7 @@
             :movieOrSerie="serie"
           ></card>
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -44,8 +47,9 @@
 <script>
 import axios from "axios";
 import Card from "../components/partials_boolflix/Card.vue";
+import PopularMovies from "../components/partials_boolflix/PopularMovies.vue";
 export default {
-  components: { Card },
+  components: { Card, PopularMovies },
   name: "Boolflix",
   data() {
     return {
@@ -55,7 +59,7 @@ export default {
       testoDaRicercare: "",
       movies: [],
       // movie_id: 527774,
-      // series: [],
+      series: [],
       singleMovieData: [],
       /**
        * TODO Prendere l'id dinamico al posto di movie_id non deve rimanere fisso
@@ -88,9 +92,6 @@ export default {
       this.prendiRisultati("tv", this.testoDaRicercare, "series");
       // this.takeSingleMovie();
     },
-  },
-  mounted() {
-    // this.stampaRisultati();
   },
 };
 </script>

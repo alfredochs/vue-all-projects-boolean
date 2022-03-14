@@ -15,7 +15,7 @@
         <h5 class="card-title">
           {{ generaTitolo() }}
         </h5>
-        <p>{{ movieOrSerie.id }}</p>
+        <!-- <p>{{ movieOrSerie.id }}</p> -->
         <router-link
           :to="{ name: 'SingleMovie', params: { movieID: movieOrSerie.id } }"
           >Mostra Dettagli</router-link
