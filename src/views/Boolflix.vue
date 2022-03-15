@@ -2,18 +2,42 @@
   <div class="container-fluid">
     <div class="container">
       <!-- Search -->
-      <div class="d-flex">
-        <input
-          class="form-control me-2"
-          placeholder="Search"
-          type="text"
-          v-model="testoDaRicercare"
-          @keydown.enter="stampaRisultati"
-        />
-        <button class="btn btn-outline-dark" @click="stampaRisultati">
-          Cerca
-        </button>
+      <div class="m-auto w-50 d-flex justify-content-around">
+        <div class="d-flex">
+          <input
+            class="form-control me-2"
+            placeholder="Search"
+            type="text"
+            v-model="testoDaRicercare"
+            @keydown.enter="stampaRisultati"
+          />
+          <button class="btn btn-outline-dark" @click="stampaRisultati">
+            Cerca
+          </button>
+        </div>
+        <!-- filtro genres -->
+        <div>
+          <!-- <select name="genres" id="" v-model="idScelto">
+            <option v-for="(genre, i) in takeGenresId" :key="i" :value="genre">
+              {{ genre }}
+            </option>
+          </select> -->
+        </div>
+        <!-- Btn per pulire la ricerca -->
+        <div>
+          <button @click="cleanFilter">Clear</button>
+        </div>
+        <!-- Select con nomi dei generi -->
+        <div>
+          select con i nomi dei generi
+          <select v-model="idScelto">
+            <option :value="genre.id" v-for="(genre, i) in genres" :key="i">
+              {{ genre.name }}-{{ genre.id }}
+            </option>
+          </select>
+        </div>
       </div>
+
       <!-- Latest Movies -->
       <popular-movies
         v-if="movies.length == 0 && series.length == 0"
@@ -23,8 +47,8 @@
         <h3>Movies</h3>
         <div class="row row-cols-4 flex-nowrap overflow-auto g-0">
           <card
-            v-for="movie in movies"
-            :key="movie.id"
+            v-for="(movie, i) in filterGenres"
+            :key="i"
             :movieOrSerie="movie"
           ></card>
         </div>
@@ -57,15 +81,10 @@ export default {
       apiUrl: "https://api.themoviedb.org/3/search/",
       apiUrlActor: "https://api.themoviedb.org/3/",
       testoDaRicercare: "",
+      idScelto: "",
       movies: [],
-      // movie_id: 527774,
       series: [],
-      singleMovieData: [],
-      /**
-       * TODO Prendere l'id dinamico al posto di movie_id non deve rimanere fisso
-       */
-      // movie_id: this.movie.id,
-      //https://api.themoviedb.org/3/movie/550?api_key=f8519d76cebb62a56eaee41d2d683f32
+      genres: [],
     };
   },
   methods: {
@@ -90,8 +109,68 @@ export default {
     stampaRisultati() {
       this.prendiRisultati("movie", this.testoDaRicercare, "movies");
       this.prendiRisultati("tv", this.testoDaRicercare, "series");
+      // this.filterGenres();
       // this.takeSingleMovie();
     },
+    cleanFilter() {
+      return (this.idScelto = "");
+    },
+    getAllGenres() {
+      //https://api.themoviedb.org/3/genre/movie/list?api_key=<<api_key>>&language=en-US
+      axios
+        .get(this.apiUrlActor + "genre/movie/list", {
+          params: {
+            api_key: this.apiKey,
+          },
+        })
+        .then((resp) => {
+          this.genres = resp.data.genres;
+        });
+    },
+  },
+  computed: {
+    /**
+     ** Take all the genres_id from the movies[] or series [] for make an option on the select
+     ** in questa funzione ho fatto un ciclo dentro un ciclo, avevo un array grande (arrOfarrGenres) con dentro
+     ** gli altri array che contengono i singoli id di ogni film. foreach per prendere i singoli array all'interno
+     ** dell'array grande e un forOf per prendere i valori dei singoli array.
+     */
+    takeGenresId() {
+      const arrOfarrGenres = this.movies.map((movieArr) => {
+        return movieArr.genre_ids;
+      });
+      const valori = [];
+      arrOfarrGenres.forEach((arrSingolo) => {
+        for (const value of arrSingolo) {
+          if (!valori.includes(value)) {
+            return valori.push(value);
+          }
+        }
+        return valori;
+      });
+      valori.sort((a, b) => {
+        return a - b;
+      });
+      // console.log(valori);
+      return valori;
+    },
+    /**
+     * TODO Manca aggiungere anche il filtro alle serie,  per il momento funziona solo con i film
+     ** Questa funzione filtra i risultati
+     */
+    filterGenres() {
+      if (!this.idScelto) {
+        return this.movies;
+      }
+      return this.movies.filter((movie) => {
+        if (movie.genre_ids.includes(this.idScelto)) {
+          return movie;
+        }
+      });
+    },
+  },
+  mounted() {
+    this.getAllGenres();
   },
 };
 </script>

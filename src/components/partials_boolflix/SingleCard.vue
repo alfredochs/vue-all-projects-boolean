@@ -82,7 +82,6 @@ export default {
   data() {
     return {
       urlImgBase: "https://image.tmdb.org/t/p/w342",
-      //   genres: this.ObjectToShow.genres,
     };
   },
   props: {
