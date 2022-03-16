@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <!-- Search -->
-    <nav class="navbar navbar-dark p-0">
+    <nav class="navbar navbar-dark p-0 pt-3">
       <!-- search input btn & clear -->
       <!-- <div class="d-flex justify-content-between"> -->
       <div class="d-flex justify-content-center">
@@ -212,7 +212,6 @@ export default {
     mergeArray() {
       var both_genres = this.movie_genres.concat(this.series_genres);
       // console.log(both_genres);
-      // return both_genres;
       both_genres = both_genres.filter(
         (value, index, self) =>
           index ===
@@ -221,6 +220,9 @@ export default {
           )
       );
       // console.log(both_genres);
+      both_genres.sort((a, b) =>
+        a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+      );
       return both_genres;
     },
   },
