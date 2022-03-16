@@ -1,68 +1,91 @@
 <template>
   <div class="container-fluid">
-    <div class="container">
-      <!-- Search -->
-      <div class="m-auto w-50 d-flex justify-content-around">
-        <div class="d-flex">
-          <input
-            class="form-control me-2"
-            placeholder="Search"
-            type="text"
-            v-model="testoDaRicercare"
-            @keydown.enter="stampaRisultati"
-          />
-          <button class="btn btn-outline-dark" @click="stampaRisultati">
-            Cerca
-          </button>
-        </div>
-        <!-- filtro genres -->
-        <div>
-          <!-- <select name="genres" id="" v-model="idScelto">
-            <option v-for="(genre, i) in takeGenresId" :key="i" :value="genre">
-              {{ genre }}
-            </option>
-          </select> -->
-        </div>
+    <!-- Search -->
+    <nav class="navbar navbar-light bg-light">
+      <!-- search input btn & clear -->
+      <!-- <div class="d-flex justify-content-between"> -->
+      <div class="d-flex justify-content-center">
+        <input
+          class="form-control me-2"
+          placeholder="Search"
+          type="text"
+          v-model="testoDaRicercare"
+          @keydown.enter="stampaRisultatiDellaRicerca"
+        />
+        <button
+          class="btn btn-outline-dark"
+          @click="stampaRisultatiDellaRicerca"
+        >
+          Cerca
+        </button>
         <!-- Btn per pulire la ricerca -->
-        <div>
-          <button @click="cleanFilter">Clear</button>
+      </div>
+      <!-- Select con nomi di tutti i generi mischiati -->
+      <div
+        v-if="this.movies.length > 0"
+        class="d-flex justify-content-center align-items-center"
+      >
+        <div class="d-flex flex-shrink-0">
+          <h6 class="m-2">Genres List</h6>
         </div>
-        <!-- Select con nomi dei generi -->
-        <div>
-          select con i nomi dei generi
-          <select v-model="idScelto">
-            <option :value="genre.id" v-for="(genre, i) in genres" :key="i">
-              {{ genre.name }}-{{ genre.id }}
-            </option>
-          </select>
-        </div>
+        <select
+          v-model="idScelto"
+          class="form-select form-select-sm"
+          aria-label=".form-select-sm example"
+        >
+          <option :value="genre.id" v-for="(genre, i) in mergeArray" :key="i">
+            {{ genre.name }}
+          </option>
+        </select>
+        <button class="btn btn-success ms-2" @click="cleanFilter">Clear</button>
       </div>
 
-      <!-- Latest Movies -->
-      <popular-movies
-        v-if="movies.length == 0 && series.length == 0"
-      ></popular-movies>
-      <!-- Movies -->
-      <div v-if="movies.length > 0">
-        <h3>Movies</h3>
-        <div class="row row-cols-4 flex-nowrap overflow-auto g-0">
-          <card
-            v-for="(movie, i) in filterGenres"
-            :key="i"
-            :movieOrSerie="movie"
-          ></card>
-        </div>
+      <!-- List for show how many genres are repeated in both lists -->
+      <!-- <div class="d-flex">
+            <div>
+              <ul class="list-unstyled">
+                <li class="border" v-for="(genre, i) in movie_genres" :key="i">
+                  {{ genre.name }}
+                </li>
+              </ul>
+            </div>
+            <div>
+              <ul class="list-unstyled">
+                <li class="border" v-for="(genre, i) in series_genres" :key="i">
+                  {{ genre.name }}
+                </li>
+              </ul>
+            </div>
+          </div> -->
+      <!-- </div> -->
+    </nav>
+
+    <!-- Latest Movies -->
+    <popular-movies
+      v-if="movies.length == 0 && series.length == 0"
+    ></popular-movies>
+    <!-- Movies -->
+    <div class="" v-if="movies.length > 0">
+      <h3>Movies</h3>
+      <div class="row row-cols-4 flex-nowrap overflow-auto g-0">
+        <!-- v-for="(movie, i) in filterGenres" -->
+        <card
+          class=""
+          v-for="(movie, i) in filterGenres(this.movies)"
+          :key="i"
+          :movieOrSerie="movie"
+        ></card>
       </div>
-      <!-- Series -->
-      <div v-if="series.length > 0">
-        <h3>Series</h3>
-        <div class="row row-cols-4 flex-nowrap overflow-auto g-0">
-          <card
-            v-for="serie in series"
-            :key="serie.id"
-            :movieOrSerie="serie"
-          ></card>
-        </div>
+    </div>
+    <!-- Series -->
+    <div v-if="this.series.length > 0">
+      <h3>Series</h3>
+      <div class="row row-cols-4 flex-nowrap overflow-auto g-0">
+        <card
+          v-for="serie in filterGenres(this.series)"
+          :key="serie.id"
+          :movieOrSerie="serie"
+        ></card>
       </div>
     </div>
   </div>
@@ -72,10 +95,12 @@
 import axios from "axios";
 import Card from "../components/partials_boolflix/Card.vue";
 import PopularMovies from "../components/partials_boolflix/PopularMovies.vue";
+// import About from "./About.vue";
 export default {
   components: { Card, PopularMovies },
   name: "Boolflix",
   data() {
+    // FONTE THE MOVIE DB
     return {
       apiKey: "f8519d76cebb62a56eaee41d2d683f32",
       apiUrl: "https://api.themoviedb.org/3/search/",
@@ -84,14 +109,18 @@ export default {
       idScelto: "",
       movies: [],
       series: [],
-      genres: [],
+      movie_genres: [],
+      series_genres: [],
     };
   },
   methods: {
-    //https://api.themoviedb.org/3/search/movie?api_key=<<api_key>>&language=en-US&page=1&include_adult=false
-    //https://api.themoviedb.org/3/search/movie?api_key=e99307154c6dfb0b4750f6603256716d&query=ritorno+al+futuro
-
-    prendiRisultati(movieOrSerie, input, doveSalvare) {
+    /**
+     ** Take the results and save those in specific array -> movies[], series[]
+     * @param {string} movieOrSerie - Choose between "movie" or "tv"
+     * @param {string} input - take the v-model of the search (where did you save it ?)
+     * @param {string} whereWillBeSaved - choose like a string the name of the array where you will save the data of the resp.
+     */
+    takeResultsOfSearchInput(movieOrSerie, input, whereWillBeSaved) {
       axios
         .get(this.apiUrl + movieOrSerie, {
           params: {
@@ -100,36 +129,56 @@ export default {
           },
         })
         .then((resp) => {
-          this[doveSalvare] = resp.data.results;
+          this[whereWillBeSaved] = resp.data.results;
         });
     },
     /**
-     **Stampa i risultati della chiamata API
+     ** Call the takeResultsOfSearchInput() and invoke the results with differents parameters
      */
-    stampaRisultati() {
-      this.prendiRisultati("movie", this.testoDaRicercare, "movies");
-      this.prendiRisultati("tv", this.testoDaRicercare, "series");
-      // this.filterGenres();
-      // this.takeSingleMovie();
+    stampaRisultatiDellaRicerca() {
+      this.takeResultsOfSearchInput("movie", this.testoDaRicercare, "movies");
+      this.takeResultsOfSearchInput("tv", this.testoDaRicercare, "series");
     },
+    /**
+     ** Like his name says, will clean the results of the research input.
+     */
     cleanFilter() {
       return (this.idScelto = "");
     },
-    getAllGenres() {
-      //https://api.themoviedb.org/3/genre/movie/list?api_key=<<api_key>>&language=en-US
+    /**
+     ** With a API call, will take all the genres (movies_genres and series_genres)
+     *@param {string} movieOrSerie - choose from string "movie" or "tv"
+     *@param {string} whereWillBeSaved - choose the name of the array, where you will save the genres (is an array but in this case we need the name of the array, and for that the value of this param is a strign)
+     */
+    getAllGenres(movieOrSerie, whereWillBeSaved) {
       axios
-        .get(this.apiUrlActor + "genre/movie/list", {
+        .get(this.apiUrlActor + "genre/" + movieOrSerie + "/list", {
           params: {
             api_key: this.apiKey,
           },
         })
         .then((resp) => {
-          this.genres = resp.data.genres;
+          this[whereWillBeSaved] = resp.data.genres;
         });
+    },
+    /**
+     **Filter applicated to the template, will show series and movies just changing the param
+     *@param {array} arrToFilter - Indicate wich will be the array to filter
+     */
+    filterGenres(arrToFilter) {
+      if (!this.idScelto) {
+        return arrToFilter;
+      }
+      return arrToFilter.filter((el) => {
+        if (el.genre_ids.includes(this.idScelto)) {
+          return el;
+        }
+      });
     },
   },
   computed: {
     /**
+     * ? AL MOMENTO NON LO SI STA UTILIZZANDO
      ** Take all the genres_id from the movies[] or series [] for make an option on the select
      ** in questa funzione ho fatto un ciclo dentro un ciclo, avevo un array grande (arrOfarrGenres) con dentro
      ** gli altri array che contengono i singoli id di ogni film. foreach per prendere i singoli array all'interno
@@ -155,28 +204,45 @@ export default {
       return valori;
     },
     /**
-     * TODO Manca aggiungere anche il filtro alle serie,  per il momento funziona solo con i film
-     ** Questa funzione filtra i risultati
+     ** merge the array of genres to both_genres
      */
-    filterGenres() {
-      if (!this.idScelto) {
-        return this.movies;
-      }
-      return this.movies.filter((movie) => {
-        if (movie.genre_ids.includes(this.idScelto)) {
-          return movie;
-        }
-      });
+    mergeArray() {
+      var both_genres = this.movie_genres.concat(this.series_genres);
+      // console.log(both_genres);
+      // return both_genres;
+      both_genres = both_genres.filter(
+        (value, index, self) =>
+          index ===
+          self.findIndex(
+            (t) => t.place === value.place && t.name === value.name
+          )
+      );
+      // console.log(both_genres);
+      return both_genres;
     },
   },
+  /**
+   ** Mounted works from the begining of the page, execute the function at the refresh
+   */
   mounted() {
-    this.getAllGenres();
+    this.getAllGenres("movie", "movie_genres");
+    this.getAllGenres("tv", "series_genres");
   },
 };
 </script>
 
 <style lang="scss" scoped>
-body {
-  background-color: black;
+//Din't work jet, useful for hide the scrollbar but still scroll
+.parent-hide-scrollbar {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.child-hide-scrollbar {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  padding-right: 17px; /* Increase/decrease this value for cross-browser compatibility */
+  box-sizing: content-box; /* So the width will be 100% + 17px */
 }
 </style>
