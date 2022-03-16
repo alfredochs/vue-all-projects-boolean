@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <!-- Search -->
-    <nav class="navbar navbar-light bg-light">
+    <nav class="navbar navbar-dark p-0">
       <!-- search input btn & clear -->
       <!-- <div class="d-flex justify-content-between"> -->
       <div class="d-flex justify-content-center">
@@ -12,10 +12,7 @@
           v-model="testoDaRicercare"
           @keydown.enter="stampaRisultatiDellaRicerca"
         />
-        <button
-          class="btn btn-outline-dark"
-          @click="stampaRisultatiDellaRicerca"
-        >
+        <button class="btn btn-danger" @click="stampaRisultatiDellaRicerca">
           Cerca
         </button>
         <!-- Btn per pulire la ricerca -->
@@ -65,28 +62,34 @@
       v-if="movies.length == 0 && series.length == 0"
     ></popular-movies>
     <!-- Movies -->
-    <div class="" v-if="movies.length > 0">
-      <h3>Movies</h3>
-      <div class="row row-cols-4 flex-nowrap overflow-auto g-0">
-        <!-- v-for="(movie, i) in filterGenres" -->
-        <card
-          class=""
-          v-for="(movie, i) in filterGenres(this.movies)"
-          :key="i"
-          :movieOrSerie="movie"
-        ></card>
+    <div v-if="movies.length > 0">
+      <div class="" v-if="filterGenres(this.movies).length > 0">
+        <h3>Movies</h3>
+        <div class="row row-cols-4 flex-nowrap overflow-auto g-0">
+          <!-- v-for="(movie, i) in filterGenres" -->
+          <card
+            class=""
+            v-for="(movie, i) in filterGenres(this.movies)"
+            :key="i"
+            :movieOrSerie="movie"
+          ></card>
+        </div>
       </div>
+      <h6 v-else>Non ci sono Films di questo Genere</h6>
     </div>
     <!-- Series -->
-    <div v-if="this.series.length > 0">
-      <h3>Series</h3>
-      <div class="row row-cols-4 flex-nowrap overflow-auto g-0">
-        <card
-          v-for="serie in filterGenres(this.series)"
-          :key="serie.id"
-          :movieOrSerie="serie"
-        ></card>
+    <div v-if="series.length > 0">
+      <div v-if="filterGenres(this.series).length > 0">
+        <h3>Series</h3>
+        <div class="row row-cols-4 flex-nowrap overflow-auto g-0">
+          <card
+            v-for="serie in filterGenres(this.series)"
+            :key="serie.id"
+            :movieOrSerie="serie"
+          ></card>
+        </div>
       </div>
+      <h6 v-else>Non ci sono serie con questo genere</h6>
     </div>
   </div>
 </template>
