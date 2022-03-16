@@ -25,7 +25,7 @@
         </div>
         <!-- Btn per pulire la ricerca -->
         <div>
-          <button @click="cleanFilter">Clear</button>
+          <button class="btn" @click="cleanFilter">Clear</button>
         </div>
         <!-- Select con nomi dei generi -->
         <div class="d-flex flex-column bg-danger">
