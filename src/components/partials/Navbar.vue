@@ -31,6 +31,9 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/slider">Slider</router-link>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/playstation">Playstation</router-link>
+          </li>
         </ul>
         <!-- <form class="d-flex">
           <input

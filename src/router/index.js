@@ -34,6 +34,12 @@ const routes = [
     name: "SingleMovie",
     component: () => import("../components/partials_boolflix/SingleMovie.vue"),
   },
+  {
+    path: "/playstation",
+    // props: true,
+    name: "PlayStation",
+    component: () => import("../views/PlayStation.vue"),
+  },
 ];
 
 const router = new VueRouter({
