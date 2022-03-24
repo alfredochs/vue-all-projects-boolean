@@ -19,7 +19,7 @@
         </button>
         <img :src="image.img" class="rounded-3" />
         <div class="text-container">
-          <p>{{ image.titolo }}</p>
+          <p class="">{{ image.titolo }}</p>
           <p>{{ image.sottotitolo }}</p>
         </div>
       </div>
@@ -53,6 +53,11 @@
             img: require("../assets/Playstation/returnal-listing-thumb-01-ps5.jpg"),
             titolo: "Returnal",
             sottotitolo: "Returnal Description"
+          },
+          {
+            img: require("../assets/Playstation/gow.jpeg"),
+            titolo: "God Of War",
+            sottotitolo: "GoW"
           }
         ],
         currentImg: 0
