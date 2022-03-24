@@ -1,11 +1,10 @@
 <template>
-<div>
 
   <div class="container-fluid jumbo-returnal">
     <div class="container">
       <div class="col-4 text-white text-start container-text-returnal">
         <img
-          src="../../assets/img-ps/returnal-hero-banner-logo.png"
+          src="../../assets/img-ps/it-takes-two-logo.png"
           class="w-75"
           alt=""
         />
@@ -31,14 +30,14 @@ export default {
 
 <style lang="scss" scoped>
 .jumbo-returnal {
-  background-image: url("../../assets/img-ps/jumbo-bg.png");
+  background-image: url("../../assets/img-ps/it-takes-two-hero-banner-desktop.jpg");
   min-height: 550px;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   // background-position-y: center;
   .container-text-returnal{
-      padding-top: 20%;
+    padding: 120px 0 100px 0;
   }
 }
 </style>
