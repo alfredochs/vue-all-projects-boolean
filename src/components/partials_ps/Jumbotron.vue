@@ -1,4 +1,6 @@
 <template>
+<div>
+
   <div class="container-fluid jumbo-returnal">
     <div class="container">
       <div class="col-4 text-white text-start container-text-returnal">
