@@ -7,8 +7,8 @@
     </section>
 
     <section class="container">
-      <div class="d-flex align-items-center">
-        <div class="col-6">
+      <div class="d-flex align-items-center row">
+        <div class="col-12 col-md-6">
           <div class="text-start">
             <h3 class="title-h3">Console Playstation 5</h3>
             <span
@@ -20,7 +20,7 @@
             </button>
           </div>
         </div>
-        <div class="col-6">
+        <div class="col-12 col-md-6">
           <img
             src="../../assets/img-ps/playstation-5-thumb.png"
             alt=""
@@ -31,25 +31,25 @@
     </section>
 
     <section class="container">
-      <div class="d-flex">
-        <div
-          v-for="(product, i) in products"
-          :key="i"
-          class="
-            card
-            w-100
-            border-0    
-            d-flex
-            flex-column
-            align-items-center
-            my-card
-          "
-        >
-          <img :src="product.img" alt="" class="card-img-top w-50" />
-          <div class="card-body">
-            <p class="card-text">
-              {{ product.titolo }}
-            </p>
+      <div class="row row-cols-3 row-cols-md-5 m-0">
+        <div class="col" v-for="(product, i) in products" :key="i">
+          <div
+            class="
+              card
+              w-100
+              border-0
+              d-flex
+              flex-column
+              align-items-center
+              my-card
+            "
+          >
+            <img :src="product.img" alt="" class="card-img-top w-75" />
+            <div class="card-body d-none d-md-block">
+              <p class="card-text">
+                {{ product.titolo }}
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -90,5 +90,4 @@ export default {
 </script>
 
 <style lang="scss" >
-
 </style>

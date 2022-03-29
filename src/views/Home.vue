@@ -1,7 +1,7 @@
 <template>
-  <div class="container h-100 p-5">
+  <div class="container h-100 p-5 my-container mt-5">
     <div class="row">
-      <div class="col-6 m-auto">
+      <div class="col-12 col-lg-6 m-md-auto">
         <!-- Text Container -->
         <div class="container d-flex flex-column p-0 align-items-baseline">
           <span class="d-block">Ciao, sono</span>
@@ -44,7 +44,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-6 col-sm-12 m-auto">
+      <div class="col-12 col-lg-6 mt-5 m-md-auto">
         <img src="../../src/assets/images/cv-photo-2.jpg" alt="" class="w-50" />
       </div>
     </div>
@@ -88,4 +88,6 @@
     display: flex;
     flex-wrap: wrap;
   }
+  .my-container{
+    background-color: #f5f5f5;}
 </style>

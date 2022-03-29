@@ -8,7 +8,7 @@
       </div>
     </div> -->
     <!-- FINE -->
-    <div class="card w-75 h-100 border-0">
+    <div class="card  h-100 border-0">
       <img
         :src="generaImage()"
         class="card-img-top h-100"

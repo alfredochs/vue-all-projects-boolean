@@ -4,7 +4,7 @@
     <h4>Nuove Uscite</h4>
     <p>Giochi incredibili per PS4 e PS5 disponibili ora</p>
 
-    <div class="row row-cols-md-6 g-4">
+    <div class="row row-cols-2 row-cols-sm-3  g-4">
       <card-games
         v-for="(game, i) in giochi"
         :key="i"

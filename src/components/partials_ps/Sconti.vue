@@ -5,11 +5,15 @@
       Sconti pazzeschi, collezione curate e saldi stagionali su PS5, PS4 e PS
       VR, tutti in un unico posto.
     </p>
-<div class="d-flex justify-content-center gap-4">
-    <!-- <div v-for="(sconto, i) in sconti" :key="i"> -->
-      <img v-for="(sconto, i) in sconti" :key="i" :src="sconto.img" alt="" class="w-25"/>
-
-</div>
+    <div class="row row-cols-1 row-cols-md-3">
+      <div v-for="(sconto, i) in sconti" :key="i" class="col pt-2">
+      <img
+        :src="sconto.img"
+        alt=""
+        class="w-100"
+      />
+      </div>
+    </div>
   </div>
 </template>
 

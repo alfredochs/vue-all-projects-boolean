@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Popular films</h1>
-    <div class="row row-cols-4 flex-nowrap overflow-auto g-0">
+    <div class="row row-cols-4 flex-wrap flex-md-nowrap overflow-auto g-0">
       <card
         v-for="movie in latestMovies"
         :key="movie.id"
