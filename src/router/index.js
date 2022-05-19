@@ -40,6 +40,12 @@ const routes = [
     name: "PlayStation",
     component: () => import("../views/PlayStation.vue"),
   },
+  {
+    path: "/grid",
+    // props: true,
+    name: "Grid Example",
+    component: () => import("../views/GridExample.vue"),
+  },
 ];
 
 const router = new VueRouter({

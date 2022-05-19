@@ -7,7 +7,7 @@
 
         <img
           src="../../assets/img-ps/it-takes-two-logo.png"
-          class="w-100"
+          class="w-75"
           alt=""
         />
         </div>

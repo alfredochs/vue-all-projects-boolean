@@ -10,7 +10,7 @@
       <img
         :src="sconto.img"
         alt=""
-        class="w-100"
+        class="w-75"
       />
       </div>
     </div>
