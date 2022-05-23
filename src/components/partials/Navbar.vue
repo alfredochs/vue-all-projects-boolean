@@ -35,7 +35,7 @@
             <router-link class="nav-link" to="/playstation">Playstation</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/grid">Grid Example</router-link>
+            <router-link class="nav-link" to="/calculator">Calculator</router-link>
           </li>
         </ul>
         <!-- <form class="d-flex">

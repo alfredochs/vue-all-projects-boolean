@@ -41,10 +41,10 @@ const routes = [
     component: () => import("../views/PlayStation.vue"),
   },
   {
-    path: "/grid",
+    path: "/calculator",
     // props: true,
-    name: "Grid Example",
-    component: () => import("../views/GridExample.vue"),
+    name: "Calculator",
+    component: () => import("../views/Calculator.vue"),
   },
 ];
 
