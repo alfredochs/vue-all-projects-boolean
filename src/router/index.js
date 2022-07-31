@@ -46,6 +46,12 @@ const routes = [
     name: "Pokedex",
     component: () => import("../views/Pokedex.vue"),
   },
+  {
+    path: "/Pokedex/Generation/:generationID",
+    props: true,
+    name: "Pokemons",
+    component: () => import("../components/partials_pokedex/Pokemons.vue"),
+  },
 ];
 
 const router = new VueRouter({

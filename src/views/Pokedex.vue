@@ -14,9 +14,17 @@
         <div class="card">
           <!-- <img src="..." class="card-img-top" alt="..." /> -->
           <div class="card-body">
-            <h5 class="card-title">{{generation.name}}</h5>
+            <h5 class="card-title">{{generation.name.toUpperCase()}}</h5>
               <p>Quantity Of Pokemons Founded: <span class="badge bg-info">{{generation.pokemon_quantity}}</span></p>
               <a class="btn btn-primary" :href="generation.url">Take data from this generation.</a>
+              <router-link type="button" class="btn btn-outline-primary" 
+              :to="{ 
+                name: 'Pokemons', 
+                params: {
+                  generationID: generation.id,
+                  } }">
+              Mostra
+              </router-link>
           </div>
         </div>
       </div>
