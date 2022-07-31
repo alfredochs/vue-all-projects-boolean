@@ -1,13 +1,24 @@
 <template>
   <div class="container">
-    <button class="btn">Order</button>
-    <div class="py-3 d-flex justify-content-center">
+    <!-- <div class="py-3 d-flex justify-content-center">
       <div class="border">
         <ul>
-          <li v-for="(obj, i) in usefulInformation" :key="i">
-            {{ obj.name }}
+          <li v-for="(generation, i) in infoFromGenerations" :key="i">
+            {{ generation.name }}
           </li>
         </ul>
+      </div>
+    </div> -->
+    <div class="row row-cols-1 row-cols-md-2 g-4 my-auto">
+      <div v-for="generation,i in infoFromGenerations" :key="i" class="col">
+        <div class="card">
+          <!-- <img src="..." class="card-img-top" alt="..." /> -->
+          <div class="card-body">
+            <h5 class="card-title">{{generation.name}}</h5>
+              <p>Quantity Of Pokemons Founded: <span class="badge bg-info">{{generation.pokemon_quantity}}</span></p>
+              <a class="btn btn-primary" :href="generation.url">Take data from this generation.</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -64,6 +75,7 @@ export default {
               id: respObj.data.id,
               name: respObj.data.main_region.name,
               url: respObj.data.main_region.url,
+              pokemon_quantity: respObj.data.pokemon_species.length,
             };
             this.infoFromGenerations.push(usefulInfo);
           });
