@@ -1,16 +1,11 @@
 <template>
   <div class="container">
+    <button class="btn">Order</button>
     <div class="py-3 d-flex justify-content-center">
       <div class="border">
-        <ul class="list-group">
-          <li
-            v-for="(generation, i) in infoFromGenerations"
-            :key="i"
-            class="list-group-item"
-          >
-            <a :href="generation.url">
-              {{ generation.name }}
-            </a>
+        <ul>
+          <li v-for="(obj, i) in usefulInformation" :key="i">
+            {{ obj.name }}
           </li>
         </ul>
       </div>
@@ -27,7 +22,6 @@ export default {
       apiGeneral: "https://pokeapi.co/api/v2/pokemon/",
       apiGenerations: "https://pokeapi.co/api/v2/generation/",
       info: [],
-      customInfo: [],
       generationsData: [],
       generationsIds: [],
       infoFromGenerations: [],
@@ -56,28 +50,31 @@ export default {
       });
     },
 
-    getInfoFromGenerations() {
-      return new Promise((resolve, reject) => {
-        this.generationsIds.forEach((id) => {
-          const objSingleGeneration = {}
-          axios.get(this.apiGenerations + id).then((resp) => {
-            objSingleGeneration.id = resp.data.id;
-            objSingleGeneration.name = resp.data.main_region.name;
-            objSingleGeneration.pokemon_species = resp.data.pokemon_species;
-            this.infoFromGenerations.push(objSingleGeneration);
+    async getInfoByGenerations() {
+      const endPoints = [];
+      this.generationsIds.forEach((id) => {
+        const call = this.apiGenerations + id;
+        endPoints.push(call);
+      });
+      return axios
+        .all(endPoints.map((endPoint) => axios.get(endPoint)))
+        .then((resp) => {
+          resp.map((respObj) => {
+            const usefulInfo = {
+              id: respObj.data.id,
+              name: respObj.data.main_region.name,
+              url: respObj.data.main_region.url,
+            };
+            this.infoFromGenerations.push(usefulInfo);
           });
         });
-        resolve("Done");
-        reject("error on loop getInfoFromGenerations");
-      });
     },
 
     async TakeAll() {
       await this.getGenerations(this.apiGenerations);
       await this.getIdsGenerations();
-      await this.getInfoFromGenerations();
+      await this.getInfoByGenerations();
     },
-
     /**
      **return just name & url of every single pokemon
      */
@@ -86,6 +83,9 @@ export default {
         this.info = resp.data.results;
       });
     },
+    /**
+     *!Din't use
+     */
     customPokemonData() {
       this.info.map((data) => {
         const urlSplited = data.url.split("/");
@@ -109,7 +109,6 @@ export default {
   created() {},
   mounted() {
     this.customPokemonData();
-    // this.getGenerations(this.apiGenerations);
     this.TakeAll();
   },
 };
