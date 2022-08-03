@@ -2,11 +2,7 @@
   <div>
     <h1>Popular films</h1>
     <div class="row row-cols-4 flex-wrap flex-md-nowrap overflow-auto g-0">
-      <card
-        v-for="movie in latestMovies"
-        :key="movie.id"
-        :movieOrSerie="movie"
-      ></card>
+      <card v-for="movie in latestMovies" :key="movie.id" :movieOrSerie="movie"></card>
     </div>
   </div>
 </template>
@@ -26,8 +22,8 @@ export default {
   },
   methods: {
     /**
-     ** Prende gli ultimi film con la propria chiamata axios
-     ** Esempio -> https://api.themoviedb.org/3/movie/latest?api_key=<<api_key>>&language=en-US
+     * Take the last movies / series with an axios get
+     * @param {String} movieOrSerie 
      */
     getLatestMovies(movieOrSerie) {
       axios
@@ -40,15 +36,9 @@ export default {
           this.latestMovies = resp.data.results;
         });
     },
-    /**
-     ** Function for print the results
-     */
-    printLatestMovies() {
-      this.getLatestMovies("movie/");
-    },
   },
-  mounted() {
-    this.printLatestMovies();
+  mounted () {
+    this.getLatestMovies("movie/");
   },
 };
 </script>
