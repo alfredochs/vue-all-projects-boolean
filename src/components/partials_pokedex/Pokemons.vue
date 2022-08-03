@@ -1,11 +1,23 @@
 <template>
   <div class="container">
-    <button @click="getDataForAllPokemons()">btn</button>
-    <ul class="list-group">
-      <li class="list-group-item" v-for="(pokemon, i) in pokemons" :key="i">
-        {{ pokemon.name }}
-      </li>
-    </ul>
+    <div class="row row-cols-6 g-4">
+      <div class="col" v-for="pokemon, i in pokemonsAllInfo" :key="i">
+        <div class="card h-100">
+          <img :src="pokemon.img" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">{{ pokemon.name }}</h5>
+            <!-- <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
+              content. This content is a little bit longer.</p> -->
+            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <ul class="list-group">
+        <li class="list-group-item" v-for="(pokemon, i) in pokemons" :key="i">
+          {{ pokemon.name }}
+        </li>
+      </ul> -->
   </div>
 </template>
 
@@ -17,6 +29,7 @@ export default {
       apiGenerations: "https://pokeapi.co/api/v2/generation/",
       apiGeneral: "https://pokeapi.co/api/v2/pokemon/",
       pokemons: [],
+      pokemonsIds: [],
       pokemonsAllInfo: [],
     };
   },
@@ -29,19 +42,49 @@ export default {
       await axios.get(this.apiGenerations + this.generationID).then((resp) => {
         this.pokemons = resp.data.pokemon_species;
       });
-        this.pokemons.forEach((el, index) => {
-          console.log(el, index);
-        })
+    },
+    async getIdsForAllPokemons() {
+      this.pokemons.forEach((el) => {
+        const arr = el.url.split("/");
+        const id = arr[arr.length - 2];
+        this.pokemonsIds.push(id);
+      });
+      return this.pokemonsIds.sort((a, b) => {
+        return a - b;
+      });
+    },
+
+    async getAllDataSinglePokemon() {
+      const endPoints = [];
+      this.pokemonsIds.forEach((id) => {
+        const endPoint = this.apiGeneral + id;
+        endPoints.push(endPoint);
+      });
+      axios.all(endPoints.map((endPoint) => {
+        axios.get(endPoint).then(resp => {
+          const pathImg = resp.data.sprites.other.dream_world.front_default
+          // const anotherPath = resp.data.sprites.other.official-artwork.front_default
+          const customPokemonData = {
+            'name': resp.data.name,
+            'img': pathImg ? pathImg : 'anotherPath'
+          };
+          this.pokemonsAllInfo.push(customPokemonData);
+          // this.pokemonsAllInfo = resp.data
+        });
+      }));
     },
 
     async getAll() {
       await this.getAllPokemonsNameAndUrl();
-      // await this.getDataForAllPokemons();
+      await this.getIdsForAllPokemons();
+      await this.getAllDataSinglePokemon()
     },
   },
   computed: {},
-  mounted() {
+  created () {
     this.getAll();
+  },
+  mounted() {
   },
 };
 </script>

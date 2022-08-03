@@ -35,7 +35,7 @@
 <script>
 import axios from "axios";
 export default {
-  name: "cardItem",
+  name: "Pokedex",
   data() {
     return {
       apiGeneral: "https://pokeapi.co/api/v2/pokemon/",
@@ -95,41 +95,20 @@ export default {
       await this.getIdsGenerations();
       await this.getInfoByGenerations();
     },
-    /**
-     **return just name & url of every single pokemon
-     */
-    getAllPokemon() {
-      axios.get(this.apiGeneral).then((resp) => {
-        this.info = resp.data.results;
-      });
-    },
-    /**
-     *!Din't use
-     */
-    customPokemonData() {
-      this.info.map((data) => {
-        const urlSplited = data.url.split("/");
-        const index = urlSplited[urlSplited.length - 2];
-        const obj = {
-          name: data.name,
-          id: index,
-          url: this.apiGeneral + index,
-          img: "",
-        };
-        axios.get(obj.url).then((resp) => {
-          obj.img = resp.data.sprites.other.dream_world.front_default;
-        });
-        return this.customInfo.push(obj);
-      });
-    },
+    prova(){
+      console.log(typeof(this.generationsData));
+    }
   },
   beforeMount() {
-    this.getAllPokemon();
+    // this.getAllPokemon();
   },
-  created() {},
-  mounted() {
-    this.customPokemonData();
+  created() {
+    // this.getGenerations(this.apiGenerations)
     this.TakeAll();
+
+  },
+  mounted() {
+    this.prova()
   },
 };
 </script>
