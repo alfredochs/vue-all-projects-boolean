@@ -3,56 +3,56 @@
     <!-- Search -->
     <nav class="navbar navbar-dark p-0 pt-3">
       <!-- search input btn & clear -->
+      <!-- <div class="d-flex justify-content-between"> -->
       <div class="d-flex justify-content-center">
-        <input
-          class="form-control me-2"
-          placeholder="Search"
-          type="text"
-          v-model="testoDaRicercare"
-          @keydown.enter="stampaRisultatiDellaRicerca"
-        />
+        <input class="form-control me-2" placeholder="Search" type="text" v-model="testoDaRicercare" @keydown.enter="stampaRisultatiDellaRicerca" />
         <button class="btn btn-danger" @click="stampaRisultatiDellaRicerca">
           Cerca
         </button>
         <!-- Btn per pulire la ricerca -->
       </div>
       <!-- Select con nomi di tutti i generi mischiati -->
-      <div
-        v-if="this.movies.length > 0"
-        class="d-flex justify-content-center align-items-center"
-      >
+      <div v-if="this.movies.length > 0" class="d-flex justify-content-center align-items-center">
         <div class="d-flex flex-shrink-0">
           <h6 class="m-2">Genres List</h6>
         </div>
-        <select
-          v-model="idScelto"
-          class="form-select form-select-sm"
-          aria-label=".form-select-sm example"
-        >
+        <select v-model="idScelto" class="form-select form-select-sm" aria-label=".form-select-sm example">
           <option :value="genre.id" v-for="(genre, i) in mergeArray" :key="i">
             {{ genre.name }}
           </option>
         </select>
         <button class="btn btn-success ms-2" @click="cleanFilter">Clear</button>
       </div>
+
+      <!-- List for show how many genres are repeated in both lists -->
+      <!-- <div class="d-flex">
+            <div>
+              <ul class="list-unstyled">
+                <li class="border" v-for="(genre, i) in movie_genres" :key="i">
+                  {{ genre.name }}
+                </li>
+              </ul>
+            </div>
+            <div>
+              <ul class="list-unstyled">
+                <li class="border" v-for="(genre, i) in series_genres" :key="i">
+                  {{ genre.name }}
+                </li>
+              </ul>
+            </div>
+          </div> -->
+      <!-- </div> -->
     </nav>
 
     <!-- Latest Movies -->
-    <popular-movies
-      v-if="movies.length == 0 && series.length == 0"
-    ></popular-movies>
+    <popular-movies v-if="movies.length == 0 && series.length == 0"></popular-movies>
     <!-- Movies -->
     <div v-if="movies.length > 0">
       <div class="" v-if="filterGenres(this.movies).length > 0">
         <h3>Movies</h3>
         <div class="row row-cols-4 flex-nowrap overflow-auto g-0">
           <!-- v-for="(movie, i) in filterGenres" -->
-          <card
-            class=""
-            v-for="(movie, i) in filterGenres(this.movies)"
-            :key="i"
-            :movieOrSerie="movie"
-          ></card>
+          <card class="" v-for="(movie, i) in filterGenres(this.movies)" :key="i" :movieOrSerie="movie"></card>
         </div>
       </div>
       <h6 v-else>Non ci sono Films di questo Genere</h6>
@@ -62,11 +62,7 @@
       <div v-if="filterGenres(this.series).length > 0">
         <h3>Series</h3>
         <div class="row row-cols-4 flex-nowrap overflow-auto g-0">
-          <card
-            v-for="serie in filterGenres(this.series)"
-            :key="serie.id"
-            :movieOrSerie="serie"
-          ></card>
+          <card v-for="serie in filterGenres(this.series)" :key="serie.id" :movieOrSerie="serie"></card>
         </div>
       </div>
       <h6 v-else>Non ci sono serie con questo genere</h6>
@@ -223,11 +219,14 @@ export default {
   height: 100%;
   overflow: hidden;
 }
+
 .child-hide-scrollbar {
   width: 100%;
   height: 100%;
   overflow-y: scroll;
-  padding-right: 17px; /* Increase/decrease this value for cross-browser compatibility */
-  box-sizing: content-box; /* So the width will be 100% + 17px */
+  padding-right: 17px;
+  /* Increase/decrease this value for cross-browser compatibility */
+  box-sizing: content-box;
+  /* So the width will be 100% + 17px */
 }
 </style>
