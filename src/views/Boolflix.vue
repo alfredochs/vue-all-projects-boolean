@@ -4,25 +4,37 @@
     <nav class="navbar navbar-dark p-0 pt-3">
       <!-- search input btn & clear -->
       <div class="d-flex justify-content-center">
-        <input class="form-control me-2" placeholder="Search" type="text" v-model="testoDaRicercare" @keydown.enter="stampaRisultatiDellaRicerca"/>
-          <button class="btn btn-danger" @click="stampaRisultatiDellaRicerca">
-            Cerca
-          </button>
+        <input
+          class="form-control me-2"
+          placeholder="Search"
+          type="text"
+          v-model="testoDaRicercare"
+          @keydown.enter="stampaRisultatiDellaRicerca"
+        />
+        <button class="btn btn-danger" @click="stampaRisultatiDellaRicerca">
+          Cerca
+        </button>
         <!-- Btn per pulire la ricerca -->
       </div>
       <!-- Select con nomi di tutti i generi mischiati -->
-      <div v-if="this.movies.length > 0" class="d-flex justify-content-center align-items-center">
+      <div
+        v-if="this.movies.length > 0"
+        class="d-flex justify-content-center align-items-center"
+      >
         <div class="d-flex flex-shrink-0">
           <h6 class="m-2">Genres List</h6>
         </div>
-        <select v-model="idScelto" class="form-select form-select-sm" aria-label=".form-select-sm example">
+        <select
+          v-model="idScelto"
+          class="form-select form-select-sm"
+          aria-label=".form-select-sm example"
+        >
           <option :value="genre.id" v-for="(genre, i) in mergeArray" :key="i">
             {{ genre.name }}
           </option>
         </select>
         <button class="btn btn-success ms-2" @click="cleanFilter">Clear</button>
       </div>
-
     </nav>
 
     <!-- Latest Movies -->
@@ -50,7 +62,11 @@
       <div v-if="filterGenres(this.series).length > 0">
         <h3>Series</h3>
         <div class="row row-cols-4 flex-nowrap overflow-auto g-0">
-          <card v-for="serie in filterGenres(this.series)" :key="serie.id" :movieOrSerie="serie"></card>
+          <card
+            v-for="serie in filterGenres(this.series)"
+            :key="serie.id"
+            :movieOrSerie="serie"
+          ></card>
         </div>
       </div>
       <h6 v-else>Non ci sono serie con questo genere</h6>
