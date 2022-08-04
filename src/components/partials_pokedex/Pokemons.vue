@@ -7,6 +7,15 @@
           <div class="card-body">
             <h5 class="card-title">{{ pokemon.name }}</h5>
           </div>
+          <ul class="list-group">
+            <li class="list-group-item" v-for="type, j in pokemon.types" :key="j">
+              <button class="btn">
+                <span class="badge bg-primary">{{ type.slot }}</span>
+                <span class="badge bg-dark">{{ type.type.name }}</span>
+              </button>
+              <span></span>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -21,6 +30,7 @@ export default {
       apiGenerations: "https://pokeapi.co/api/v2/generation/",
       apiGeneral: "https://pokeapi.co/api/v2/pokemon/",
       pokemons: [],
+      endPoints: []
     };
   },
   props: {
@@ -34,12 +44,11 @@ export default {
         }).then(() => {
           this.pokemons.forEach(pokemon => {
             pokemon.id = pokemon.url.split("/").filter((el) => { return !!el; }).pop();
-            // axios.get(this.apiGeneral+pokemon.id).then((resp) =>{
-            // const dreamImage = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${pokemon.id}.svg`;
-            // const defaultImage = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`;
-            const officialArtwork = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`
+            const officialArtwork = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`;
             pokemon.image = officialArtwork;
-            // })
+            axios.get(this.apiGeneral + pokemon.id).then((resp) => {
+              pokemon.types = resp.data.types;
+            });
           });
           this.pokemons.sort((a, b) => {
             return a.id - b.id;
@@ -61,49 +70,3 @@ export default {
 
 <style>
 </style>
-
-<!-- // async getAllPokemonsNameAndUrl() {
-    //   await axios.get(this.apiGenerations + this.generationID).then((resp) => {
-    //     this.pokemons = resp.data.pokemon_species;
-    //   });
-    // },
-    // async getIdsForAllPokemons() {
-    //   this.pokemons.forEach((el) => {
-    //     const arr = el.url.split("/");
-    //     const id = arr[arr.length - 2];
-    //     this.pokemonsIds.push(id);
-    //   });
-    //   return this.pokemonsIds.sort((a, b) => {
-    //     return a - b;
-    //   });
-    // },
-    // async getAllDataSinglePokemon() {
-    //   return new Promise((resolve, reject) => {
-    //     const endPoints = [];
-    //     // const finalArr = [];
-    //     this.pokemonsIds.forEach((id) => {
-    //       const endPoint = this.apiGeneral + id;
-    //       endPoints.push(endPoint);
-    //     });
-
-    //     axios.all(endPoints.map((endPoint) => {
-    //       axios.get(endPoint).then(resp => {
-    //         const pathImg = resp.data.sprites.other.dream_world.front_default;
-    //         // const anotherPath = resp.data.sprites.other.official-artwork.front_default
-    //         const customPokemonData = {
-    //           'id': resp.data.id,
-    //           'name': resp.data.name,
-    //           'img': pathImg ? pathImg : 'anotherPath'
-    //         };
-    //         this.pokemonsAllInfo.push(customPokemonData);
-    //       });
-    //     }));
-    //     resolve(this.pokemonsAllInfo);
-    //     reject('err');
-    //   });
-    // },
-    // async order() {
-    //   return this.pokemonsAllInfo.sort((a, b) => {
-    //     return a.id - b.id;
-    //   });
-    // }, -->
