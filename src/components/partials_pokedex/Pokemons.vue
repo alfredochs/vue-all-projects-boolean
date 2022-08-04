@@ -6,18 +6,11 @@
           <img :src="pokemon.img" class="card-img-top" alt="...">
           <div class="card-body">
             <h5 class="card-title">{{ pokemon.name }}</h5>
-            <!-- <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
-              content. This content is a little bit longer.</p> -->
             <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
           </div>
         </div>
       </div>
     </div>
-    <!-- <ul class="list-group">
-        <li class="list-group-item" v-for="(pokemon, i) in pokemons" :key="i">
-          {{ pokemon.name }}
-        </li>
-      </ul> -->
   </div>
 </template>
 
@@ -34,7 +27,7 @@ export default {
     };
   },
   props: {
-    generationID: String,
+    generationID: [String, Number],
     generationCount: Number,
   },
   methods: {
@@ -62,9 +55,10 @@ export default {
       });
       axios.all(endPoints.map((endPoint) => {
         axios.get(endPoint).then(resp => {
-          const pathImg = resp.data.sprites.other.dream_world.front_default
+          const pathImg = resp.data.sprites.other.dream_world.front_default;
           // const anotherPath = resp.data.sprites.other.official-artwork.front_default
           const customPokemonData = {
+            'id': resp.data.id,
             'name': resp.data.name,
             'img': pathImg ? pathImg : 'anotherPath'
           };
@@ -73,15 +67,28 @@ export default {
         });
       }));
     },
+    /**
+     * Will order the passed array
+     * @param {Array} arr 
+     */
+    orderById(arr) {
+      return new Promise((resolve) => {
+        arr.sort((a, b) => {
+          return a.id - b.id;
+        });
+        resolve();
+      });
+    },
 
     async getAll() {
       await this.getAllPokemonsNameAndUrl();
       await this.getIdsForAllPokemons();
-      await this.getAllDataSinglePokemon()
+      await this.getAllDataSinglePokemon();
+      await this.orderById(this.pokemonsAllInfo);
     },
   },
   computed: {},
-  created () {
+  created() {
     this.getAll();
   },
   mounted() {
