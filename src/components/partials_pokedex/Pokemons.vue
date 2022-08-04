@@ -8,10 +8,10 @@
             <h5 class="card-title">{{ pokemon.name }}</h5>
           </div>
           <ul class="list-group">
-            <li class="list-group-item" v-for="type, j in pokemon.types" :key="j">
+            <li class="list-group-item" v-for="(value,key) in pokemon.types" :key="key">
               <button class="btn">
-                <span class="badge bg-primary">{{ type.slot }}</span>
-                <span class="badge bg-dark">{{ type.type.name }}</span>
+                <span class="badge bg-primary">{{ key }}</span>
+                <span class="badge bg-dark">{{ value }}</span>
               </button>
               <span></span>
             </li>
@@ -30,7 +30,6 @@ export default {
       apiGenerations: "https://pokeapi.co/api/v2/generation/",
       apiGeneral: "https://pokeapi.co/api/v2/pokemon/",
       pokemons: [],
-      endPoints: []
     };
   },
   props: {
@@ -47,7 +46,12 @@ export default {
             const officialArtwork = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`;
             pokemon.image = officialArtwork;
             axios.get(this.apiGeneral + pokemon.id).then((resp) => {
-              pokemon.types = resp.data.types;
+              const typesArr = resp.data.types;
+              const obj = {};
+              typesArr.forEach(element => {
+                obj[element.slot] = element.type.name;
+              });
+              pokemon.types = obj;
             });
           });
           this.pokemons.sort((a, b) => {
