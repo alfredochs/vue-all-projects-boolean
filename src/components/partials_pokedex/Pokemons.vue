@@ -1,35 +1,26 @@
 <template>
-  <div class="container">
+  <div class="container py-4">
+    <SearchBarPokemon :types="pokemonTypes" @filter="filterByTypes"></SearchBarPokemon>
     <div class="row row-cols-6 g-4">
-      <div class="col" v-for="pokemon, i in pokemons" :key="i">
-        <div class="card h-100">
-          <img :src="pokemon.image" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">{{ pokemon.name }}</h5>
-          </div>
-          <ul class="list-group">
-            <li class="list-group-item" v-for="(value,key) in pokemon.types" :key="key">
-              <button class="btn">
-                <span class="badge bg-primary">{{ key }}</span>
-                <span class="badge bg-dark">{{ value }}</span>
-              </button>
-              <span></span>
-            </li>
-          </ul>
-        </div>
-      </div>
+      <CardPokemon v-for="pokemon, i in filteredPokemons" :key="i" :pokemonObj="pokemon"></CardPokemon>
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import CardPokemon from "./CardPokemon.vue";
+import SearchBarPokemon from "./SearchBarPokemon.vue";
 export default {
+  components: { CardPokemon, SearchBarPokemon },
   data() {
     return {
       apiGenerations: "https://pokeapi.co/api/v2/generation/",
       apiGeneral: "https://pokeapi.co/api/v2/pokemon/",
+      apiTypes: "https://pokeapi.co/api/v2/type/",
       pokemons: [],
+      filteredPokemons: [],
+      pokemonTypes: []
     };
   },
   props: {
@@ -46,12 +37,13 @@ export default {
             const officialArtwork = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`;
             pokemon.image = officialArtwork;
             axios.get(this.apiGeneral + pokemon.id).then((resp) => {
+              // pokemon.image = resp.data.sprites.other.dream_world.front_default
               const typesArr = resp.data.types;
-              const obj = {};
+              const types = [];
               typesArr.forEach(element => {
-                obj[element.slot] = element.type.name;
+                types.push(element.type.name);
               });
-              pokemon.types = obj;
+              pokemon.type = types;
             });
           });
           this.pokemons.sort((a, b) => {
@@ -62,12 +54,45 @@ export default {
         reject('error');
       });
     },
+    allTypes() {
+      axios.get(this.apiTypes).then((resp) => {
+        return resp.data.results;
+      }).then((data) => {
+        data.forEach(type => {
+          this.pokemonTypes.push(type.name);
+        });
+      });
+    },
+    /**
+    * The param was received from $emit on SearchBarPokemon
+    * @param {String} selectedType 
+    */
+    filterByTypes(selectedType) {
+      if (selectedType == undefined) {
+        return this.pokemons;
+      }
+      this.filteredPokemons = [];
+      const filtered = this.pokemons.map((pokemon) => {
+        if (pokemon.type.includes(selectedType)) {
+          this.filteredPokemons.push(pokemon);
+          return this.filteredPokemons;
+        } else {
+          return this.filteredPokemons;
+        }
+      });
+      return filtered;
+    },
+
+  },
+
+  computed: {
+
   },
   created() {
     this.fetchData();
+    this.allTypes();
   },
   mounted() {
-    // this.order();
   },
 };
 </script>

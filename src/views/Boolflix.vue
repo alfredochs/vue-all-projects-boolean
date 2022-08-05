@@ -4,10 +4,11 @@
     <nav class="navbar navbar-dark p-0 pt-3">
       <!-- search input btn & clear -->
       <div class="d-flex justify-content-center">
-        <input class="form-control me-2" placeholder="Search" type="text" v-model="testoDaRicercare" @keydown.enter="stampaRisultatiDellaRicerca"/>
-          <button class="btn btn-danger" @click="stampaRisultatiDellaRicerca">
-            Cerca
-          </button>
+        <input class="form-control me-2" placeholder="Search" type="text" v-model="testoDaRicercare"
+          @keydown.enter="stampaRisultatiDellaRicerca" />
+        <button class="btn btn-danger" @click="stampaRisultatiDellaRicerca">
+          Cerca
+        </button>
         <!-- Btn per pulire la ricerca -->
       </div>
       <!-- Select con nomi di tutti i generi mischiati -->
@@ -26,21 +27,14 @@
     </nav>
 
     <!-- Latest Movies -->
-    <popular-movies
-      v-if="movies.length == 0 && series.length == 0"
-    ></popular-movies>
+    <popular-movies v-if="movies.length == 0 && series.length == 0"></popular-movies>
     <!-- Movies -->
     <div v-if="movies.length > 0">
       <div class="" v-if="filterGenres(this.movies).length > 0">
         <h3>Movies</h3>
         <div class="row row-cols-4 flex-nowrap overflow-auto g-0">
           <!-- v-for="(movie, i) in filterGenres" -->
-          <card
-            class=""
-            v-for="(movie, i) in filterGenres(this.movies)"
-            :key="i"
-            :movieOrSerie="movie"
-          ></card>
+          <card class="" v-for="(movie, i) in filterGenres(this.movies)" :key="i" :movieOrSerie="movie"></card>
         </div>
       </div>
       <h6 v-else>Non ci sono Films di questo Genere</h6>
@@ -67,7 +61,6 @@ export default {
   components: { Card, PopularMovies },
   name: "Boolflix",
   data() {
-    // FONTE THE MOVIE DB
     return {
       apiKey: "f8519d76cebb62a56eaee41d2d683f32",
       apiUrl: "https://api.themoviedb.org/3/search/",
@@ -207,11 +200,14 @@ export default {
   height: 100%;
   overflow: hidden;
 }
+
 .child-hide-scrollbar {
   width: 100%;
   height: 100%;
   overflow-y: scroll;
-  padding-right: 17px; /* Increase/decrease this value for cross-browser compatibility */
-  box-sizing: content-box; /* So the width will be 100% + 17px */
+  padding-right: 17px;
+  /* Increase/decrease this value for cross-browser compatibility */
+  box-sizing: content-box;
+  /* So the width will be 100% + 17px */
 }
 </style>
