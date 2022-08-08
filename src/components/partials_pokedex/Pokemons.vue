@@ -27,6 +27,16 @@ export default {
     generationID: [String, Number],
   },
   methods: {
+    /**
+    ** Using axios get to make a request and get the Data
+    ** result -> this.pokemons [
+    **{ id: str
+    ** name : str
+    ** image : url 
+    ** type : [# types]
+    ** url : url } , ...
+    **]
+    */
     fetchData() {
       return new Promise((resolve, reject) => {
         axios.get(this.apiGenerations + this.generationID).then((resp) => {
@@ -54,17 +64,23 @@ export default {
         reject('error');
       });
     },
-    allTypes() {
+    /**
+    ** Another axios request get to obtain all the types and
+    ** put the results in the searchBarPokemons Component.
+    ** return : this.pokemonsTypes []
+    */
+    getAllTypes() {
       axios.get(this.apiTypes).then((resp) => {
         return resp.data.results;
       }).then((data) => {
         data.forEach(type => {
           this.pokemonTypes.push(type.name);
         });
+        this.pokemonTypes.sort();
       });
     },
     /**
-    * The param was received from $emit on SearchBarPokemon
+    ** The param was received from $emit on SearchBarPokemon
     * @param {String} selectedType 
     */
     filterByTypes(selectedType) {
@@ -86,11 +102,10 @@ export default {
   },
 
   computed: {
-
   },
   created() {
     this.fetchData();
-    this.allTypes();
+    this.getAllTypes();
   },
   mounted() {
   },
