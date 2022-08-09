@@ -6,9 +6,9 @@
         <h5 class="card-title">{{ pokemonObj.name }}</h5>
       </div>
       <ul class="list-group">
-        <li class="list-group-item" v-for="(value, i) in pokemonObj.types" :key="i">
+        <li class="list-group-item" v-for="(value, i) in pokemonObj.type" :key="i">
           <button class="btn">
-            <!-- <span class="badge bg-primary">{{ key }}</span> -->
+            <span class="badge bg-primary">{{ i }}</span>
             <span class="badge bg-dark">{{ value }}</span>
           </button>
           <span></span>
