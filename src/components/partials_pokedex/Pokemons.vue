@@ -1,6 +1,10 @@
 <template>
   <div class="container py-4">
-    <SearchBarPokemon :types="pokemonTypes" @filter="filterByTypes"></SearchBarPokemon>
+    <!-- <SearchBarPokemon :types="pokemonTypes" @filter="filterByTypes"></SearchBarPokemon> -->
+    <select name="types" class="">
+      <option disabled selected> --choose a type-- </option>
+      <option v-for="type,i in pokemonTypes" :key="i" @select="selectedType()">{{type}}</option>
+    </select>
     <div class="row row-cols-6 g-4">
       <CardPokemon v-for="pokemon, i in pokemons" :key="i" :pokemonObj="pokemon"></CardPokemon>
     </div>
@@ -10,9 +14,12 @@
 <script>
 import axios from "axios";
 import CardPokemon from "./CardPokemon.vue";
-import SearchBarPokemon from "./SearchBarPokemon.vue";
+// import SearchBarPokemon from "./SearchBarPokemon.vue";
 export default {
-  components: { CardPokemon, SearchBarPokemon },
+  components: { 
+    CardPokemon,
+    //  SearchBarPokemon 
+     },
   data() {
     return {
       apiGenerations: "https://pokeapi.co/api/v2/generation/",
@@ -79,28 +86,20 @@ export default {
         this.pokemonTypes.sort();
       });
     },
-    /**
+    
+    /*
     ** The param was received from $emit on SearchBarPokemon
     * @param {String} selectedType 
     */
     filterByTypes(selectedType) {
-      if (selectedType == undefined) {
-        console.log(typeof(selectedType));
+      if (selectedType == "") {
         return this.pokemons;
       }
-      return this.pokemons.filter((pokemon)=>{
-        console.log(pokemon.id);
-      })
-      // this.filteredPokemons = [];
-      // const filtered = this.pokemons.map((pokemon) => {
-      //   if (pokemon.type.includes(selectedType)) {
-      //     this.filteredPokemons.push(pokemon);
-      //     return this.filteredPokemons;
-      //   } else {
-      //     return this.filteredPokemons;
-      //   }
-      // });
-      // return filtered;
+      return this.pokemons.filter((pokemon) => {
+        if (pokemon.type.includes(selectedType)) {
+          return pokemon;
+        }
+      });
     },
 
   },
@@ -113,7 +112,7 @@ export default {
     this.fetchData();
   },
   mounted() {
-    this.filterByTypes
+    this.filterByTypes;
   },
 };
 </script>

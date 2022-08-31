@@ -1,7 +1,11 @@
 <template>
   <div id="app">
     <navbar></navbar>
-    <router-view />
+    <div class="container">
+      <transition name="fade">
+        <router-view></router-view>
+      </transition>
+    </div>
   </div>
 </template>
 <script>
@@ -32,5 +36,16 @@ export default {
       color: #42b983;
     }
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s, transform 1s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translate(-30%)
 }
 </style>
