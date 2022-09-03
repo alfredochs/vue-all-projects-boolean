@@ -6,12 +6,7 @@
           {{ genere }}
         </option>
       </select>
-      <input
-        type="button"
-        class="btn btn-primary m-2"
-        @click="cleanSelect"
-        value="Clean Select"
-      />
+      <input type="button" class="btn btn-primary m-2" @click="cleanSelect" value="Clean Select" />
     </div>
     <div class="container m-auto w-75">
       <div class="row row-cols-4 g-4">
@@ -63,9 +58,9 @@ export default {
           uniquesGenres.push(el);
         }
       });
+      console.log(uniquesGenres);
       return uniquesGenres;
     },
-    //ciclo sull'array di oggetti, prendo ogni singolo oggetto, l'elemento dell'oggetto che mi serve (genre)  lo paragono alla option del select e lo faccio ritornare con un filtro
     filtro_generi() {
       if (!this.genereScelto) {
         return this.listaDischi;
@@ -78,4 +73,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+</style>

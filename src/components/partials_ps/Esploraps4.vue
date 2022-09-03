@@ -6,11 +6,7 @@
       Non c'è mai stato un momento migliore per giocare sulla tua PS4.
     </p>
     <div class="row row-cols-1 row-cols-md-3">
-      <card-ps-4
-        v-for="(prodotto, i) in prodotti"
-        :key="i"
-        :item="prodotto"
-      ></card-ps-4>
+      <card-ps-4 v-for="(prodotto, i) in prodotti" :key="i" :item="prodotto"></card-ps-4>
     </div>
   </div>
 </template>

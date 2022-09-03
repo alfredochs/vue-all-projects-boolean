@@ -3,9 +3,9 @@
     <!-- Search -->
     <nav class="navbar navbar-dark p-0 pt-3">
       <!-- search input btn & clear -->
-      <!-- <div class="d-flex justify-content-between"> -->
       <div class="d-flex justify-content-center">
-        <input class="form-control me-2" placeholder="Search" type="text" v-model="testoDaRicercare" @keydown.enter="stampaRisultatiDellaRicerca" />
+        <input class="form-control me-2" placeholder="Search" type="text" v-model="testoDaRicercare"
+          @keydown.enter="stampaRisultatiDellaRicerca" />
         <button class="btn btn-danger" @click="stampaRisultatiDellaRicerca">
           Cerca
         </button>
@@ -79,7 +79,6 @@ export default {
   components: { Card, PopularMovies },
   name: "Boolflix",
   data() {
-    // FONTE THE MOVIE DB
     return {
       apiKey: "f8519d76cebb62a56eaee41d2d683f32",
       apiUrl: "https://api.themoviedb.org/3/search/",
