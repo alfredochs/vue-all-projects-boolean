@@ -9,28 +9,16 @@
     </div> -->
     <!-- FINE -->
     <div class="card  h-100 border-0">
-      <img
-        :src="generaImage()"
-        class="card-img-top h-100"
-        :style="
-          !this.movieOrSerie.poster_path
-            ? 'object-fit:cover;object-position:center'
-            : ''
-        "
-        alt="..."
-      />
+      <img :src="generaImage()" class="card-img-top h-100" :style="
+      !this.movieOrSerie.poster_path ? 'object-fit:cover;object-position:center' : ''" alt="..." />
       <div class="card-body">
         <h6 class="card-title">
           {{ generaTitolo() }}
         </h6>
         <!-- <p>{{ movieOrSerie.id }}</p> -->
 
-        <router-link
-          type="button"
-          class="btn btn-outline-primary"
-          :to="{ name: 'SingleMovie', params: { movieID: movieOrSerie.id } }"
-          >Mostra Dettagli</router-link
-        >
+        <router-link type="button" class="btn btn-outline-primary"
+          :to="{ name: 'SingleMovie', params: { movieID: movieOrSerie.id } }">Mostra Dettagli</router-link>
         <!-- <p class="card-text">
           {{ movieOrSerie.overview }}
         </p> -->
@@ -74,4 +62,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+</style>

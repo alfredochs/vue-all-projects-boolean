@@ -22,24 +22,14 @@
             <span class="fw-bold">
               Per me una cosa è fondamentale in questo settore e nella vita, non
               dobbiamo mai smettere di imparare per poter migliorare ogni
-              singolo giorno.</span
-            >
+              singolo giorno.</span>
           </span>
         </div>
         <div class="">
           <h6 class="text-start">Find me on:</h6>
           <div class="d-flex gap-3">
-            <a
-              :href="link.url"
-              target="_blank"
-              v-for="(link, i) in iconList"
-              :key="i"
-            >
-              <i
-                class="text-start text-dark"
-                :class="link.icon"
-                style="font-size: 40px"
-              ></i>
+            <a :href="link.url" target="_blank" v-for="(link, i) in iconList" :key="i">
+              <i class="text-start text-dark" :class="link.icon" style="font-size: 40px"></i>
             </a>
           </div>
         </div>
@@ -52,42 +42,43 @@
 </template>
 
 <script>
-  // @ is an alias to /src
-  export default {
-    name: "HelloWorld",
-    data() {
-      return {
-        iconList: [
-          {
-            name: "Linkedin",
-            icon: "fa-brands fa-linkedin",
-            url: "https://www.linkedin.com/in/alfredo-chanta-solis"
-          },
-          {
-            name: "GitHub",
-            icon: "fa-brands fa-github-square",
-            url: "https://github.com/alfredochs"
-          },
-          {
-            name: "Instagram",
-            icon: "fa-brands fa-instagram",
-            url: "https://www.instagram.com/alfredochs"
-          }
-        ]
-      };
-    },
-    props: {
-      msg: String
-    }
-  };
+export default {
+  name: "Home",
+  data() {
+    return {
+      iconList: [
+        {
+          name: "Linkedin",
+          icon: "fa-brands fa-linkedin",
+          url: "https://www.linkedin.com/in/alfredo-chanta-solis"
+        },
+        {
+          name: "GitHub",
+          icon: "fa-brands fa-github-square",
+          url: "https://github.com/alfredochs"
+        },
+        {
+          name: "Instagram",
+          icon: "fa-brands fa-instagram",
+          url: "https://www.instagram.com/alfredochs"
+        }
+      ]
+    };
+  },
+  props: {
+    msg: String
+  }
+};
 </script>
 <style scoped lang="scss">
-  .my-name {
-    font-size: 40px;
-    color: red;
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .my-container{
-    background-color: #f5f5f5;}
+.my-name {
+  font-size: 40px;
+  color: red;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.my-container {
+  background-color: #f5f5f5;
+}
 </style>

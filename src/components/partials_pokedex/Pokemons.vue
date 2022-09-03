@@ -1,47 +1,118 @@
 <template>
-  <div class="container">
-    <button @click="getDataForAllPokemons()">btn</button>
-    <ul class="list-group">
-      <li class="list-group-item" v-for="(pokemon, i) in pokemons" :key="i">
-        {{ pokemon.name }}
-      </li>
-    </ul>
+  <div class="container py-4">
+    <!-- <SearchBarPokemon :types="pokemonTypes" @filter="filterByTypes"></SearchBarPokemon> -->
+    <select name="types" class="">
+      <option disabled selected> --choose a type-- </option>
+      <option v-for="type,i in pokemonTypes" :key="i" @select="selectedType()">{{type}}</option>
+    </select>
+    <div class="row row-cols-6 g-4">
+      <CardPokemon v-for="pokemon, i in pokemons" :key="i" :pokemonObj="pokemon"></CardPokemon>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import CardPokemon from "./CardPokemon.vue";
+// import SearchBarPokemon from "./SearchBarPokemon.vue";
 export default {
+  components: { 
+    CardPokemon,
+    //  SearchBarPokemon 
+     },
   data() {
     return {
       apiGenerations: "https://pokeapi.co/api/v2/generation/",
       apiGeneral: "https://pokeapi.co/api/v2/pokemon/",
+      apiTypes: "https://pokeapi.co/api/v2/type/",
       pokemons: [],
-      pokemonsAllInfo: [],
+      pokemonTypes: []
     };
   },
   props: {
-    generationID: String,
-    generationCount: Number,
+    generationID: [String, Number],
   },
   methods: {
-    async getAllPokemonsNameAndUrl() {
-      await axios.get(this.apiGenerations + this.generationID).then((resp) => {
-        this.pokemons = resp.data.pokemon_species;
+    /**
+    ** Using axios get to make a request and get the Data
+    ** return data.pokemons ->  [
+    **{ id: str
+    ** name : str
+    ** image : url 
+    ** type : [# types]
+    ** url : url } , ...
+    **]
+    */
+    fetchData() {
+      return new Promise((resolve, reject) => {
+        axios.get(this.apiGenerations + this.generationID).then((resp) => {
+          return resp.data.pokemon_species;
+        }).then((allPokemons) => {
+          allPokemons.forEach((pokemon) => {
+            pokemon.id = pokemon.url.split("/").filter((el) => { return !!el; }).pop();
+            const officialArtwork = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`;
+            pokemon.image = officialArtwork;
+            axios.get(this.apiGeneral + pokemon.id).then((resp) => {
+              const typesArr = resp.data.types;
+              const types = [];
+              typesArr.forEach(element => {
+                types.push(element.type.name);
+                pokemon.type = types;
+              });
+            });
+          });
+          this.pokemons = allPokemons;
+          this.pokemons.sort((a, b) => {
+            return a.id - b.id;
+          });
+
+        });
+        resolve();
+        reject('error');
       });
-        this.pokemons.forEach((el, index) => {
-          console.log(el, index);
-        })
+    },
+    /**
+    ** Another axios request get to obtain all the types and
+    ** put the results in the searchBarPokemons Component.
+    ** return : data.pokemonsTypes []
+    */
+    getAllTypes() {
+      axios.get(this.apiTypes).then((resp) => {
+        return resp.data.results;
+      }).then((data) => {
+        data.forEach(type => {
+          this.pokemonTypes.push(type.name);
+        });
+        this.pokemonTypes.sort();
+      });
+    },
+    
+    /*
+    ** The param was received from $emit on SearchBarPokemon
+    * @param {String} selectedType 
+    */
+    filterByTypes(selectedType) {
+      if (selectedType == "") {
+        return this.pokemons;
+      }
+      return this.pokemons.filter((pokemon) => {
+        if (pokemon.type.includes(selectedType)) {
+          return pokemon;
+        }
+      });
     },
 
-    async getAll() {
-      await this.getAllPokemonsNameAndUrl();
-      // await this.getDataForAllPokemons();
-    },
   },
-  computed: {},
+
+  computed: {
+
+  },
+  created() {
+    this.getAllTypes();
+    this.fetchData();
+  },
   mounted() {
-    this.getAll();
+    this.filterByTypes;
   },
 };
 </script>
