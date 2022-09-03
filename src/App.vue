@@ -2,7 +2,7 @@
   <div id="app">
     <navbar></navbar>
     <div class="container">
-      <transition name="fade">
+      <transition name="fade" mode="out-in">
         <router-view></router-view>
       </transition>
     </div>
@@ -40,10 +40,10 @@ export default {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s, transform 1s;
+  transition: opacity 0.5s, transform 0.5s;
 }
 
-.fade-enter-from,
+.fade-enter,
 .fade-leave-to {
   opacity: 0;
   transform: translate(-30%)
