@@ -27,6 +27,7 @@
 import axios from "axios";
 export default {
   name: "Pokedex",
+  components: {  },
   data() {
     return {
       apiGeneral: "https://pokeapi.co/api/v2/pokemon/",
@@ -37,7 +38,7 @@ export default {
   methods: {
     /**
      * Return objects with the name(ex:generation-i),url endpoint and id.
-     * @param {String} url 
+     * @param {String} url
      */
     fetchGenerations(url) {
       return new Promise((resolve, reject) => {
