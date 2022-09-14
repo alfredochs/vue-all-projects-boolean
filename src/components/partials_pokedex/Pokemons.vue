@@ -5,7 +5,7 @@
       <option disabled selected> --choose a type-- </option>
       <option v-for="type, i in pokemonTypes" :key="i" @select="selectedType()">{{ type }}</option>
     </select> -->
-    <div v-if="loading === true" class="container m-auto h-100">
+    <div v-if="loading" class="container m-auto h-100">
       <PulseLoader :loading="loading" :color="color"></PulseLoader>
     </div>
     <div v-else class="row row-cols-6 g-4">
@@ -56,14 +56,8 @@ export default {
       setTimeout(() => {
         this.toggle();
       }, 500);
-      // this.loading = true
       return new Promise((resolve, reject) => {
-        //first call
-        axios.get(this.apiGenerations + this.generationID).then((resp) => {
-          console.log('first');
-          return resp.data.pokemon_species;
-        })
-          //second call
+        axios.get(this.apiGenerations + this.generationID).then((resp) => { return resp.data.pokemon_species; })
           .then((allPokemons) => {
             allPokemons.forEach((pokemon) => {
               pokemon.id = pokemon.url.split("/").filter((el) => { return !!el; }).pop();
@@ -78,13 +72,13 @@ export default {
                 });
               });
             });
-            console.log('second');
 
             this.pokemons = allPokemons;
             this.pokemons.sort((a, b) => {
               return a.id - b.id;
             });
-          }).finally(() => {
+          })
+          .finally(() => {
             // this.loading = false
             this.toggle();
 
@@ -111,8 +105,8 @@ export default {
       });
     },
 
-    /*
-    ** The param was received from $emit on SearchBarPokemon
+    /**
+    **The param was received from $emit on SearchBarPokemon
     * @param {String} selectedType 
     */
     filterByTypes(selectedType) {
