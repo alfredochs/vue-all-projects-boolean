@@ -4,16 +4,20 @@
       <img :src="pokemonObj.image" class="card-img-top" alt="...">
       <div class="card-body">
         <h5 class="card-title">{{ pokemonObj.name }}</h5>
+        <span class="badge bg-light text-dark">#{{ pokemonObj.order }}</span>
       </div>
-      <ul class="list-group">
-        <li class="list-group-item" v-for="(value, i) in pokemonObj.type" :key="i">
-          <button class="btn">
-            <span class="badge bg-primary">{{ i }}</span>
-            <span class="badge bg-dark">{{ value }}</span>
-          </button>
-          <span></span>
-        </li>
-      </ul>
+      <div class="card-footer">
+        <router-link type="button" class="btn btn-outline-primary" :to="{
+                      name: 'SinglePokemon',
+                      params: {
+                        pokemonName : pokemonObj.name,
+                        pokemonID: pokemonObj.id,
+                      }
+                    }">
+          Mostra
+        </router-link>
+        <!-- <a name="" id="" class="badge rounded-pill bg-success" href="#" role="button">Show</a> -->
+      </div>
     </div>
   </div>
 </template>
@@ -28,4 +32,5 @@ export default {
 </script>
 
 <style>
+
 </style>

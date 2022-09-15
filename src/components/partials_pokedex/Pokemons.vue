@@ -1,10 +1,5 @@
 <template>
   <div class="container py-4">
-    <!-- <SearchBarPokemon :types="pokemonTypes" @filter="filterByTypes"></SearchBarPokemon> -->
-    <!-- <select name="types" class="">
-      <option disabled selected> --choose a type-- </option>
-      <option v-for="type, i in pokemonTypes" :key="i" @select="selectedType()">{{ type }}</option>
-    </select> -->
     <div v-if="loading" class="container m-auto h-100">
       <PulseLoader :loading="loading" :color="color"></PulseLoader>
     </div>
@@ -26,10 +21,11 @@ export default {
   },
   data() {
     return {
-      apiGenerations: "https://pokeapi.co/api/v2/generation/",
+      apiGenerations: "https://pokeapi.co/api/v2/generation/", //add id to fetch data of specific generation
       apiGeneral: "https://pokeapi.co/api/v2/pokemon/",
       apiTypes: "https://pokeapi.co/api/v2/type/",
       pokemons: [],
+      semplifiedPokemons: [],
       pokemonTypes: [],
       color: "#5DC7EC",
       loading: false,
@@ -37,6 +33,8 @@ export default {
   },
   props: {
     generationID: [String, Number],
+    generationName: String,
+    generationPokemonSpecies: Number
   },
   methods: {
     toggle() {
@@ -55,7 +53,7 @@ export default {
     fetchData() {
       setTimeout(() => {
         this.toggle();
-      }, 500);
+      }, 600);
       return new Promise((resolve, reject) => {
         axios.get(this.apiGenerations + this.generationID).then((resp) => { return resp.data.pokemon_species; })
           .then((allPokemons) => {
@@ -66,24 +64,21 @@ export default {
               axios.get(this.apiGeneral + pokemon.id).then((resp) => {
                 const typesArr = resp.data.types;
                 const types = [];
+                pokemon.order = resp.data.order
                 typesArr.forEach(element => {
                   types.push(element.type.name);
                   pokemon.type = types;
                 });
               });
             });
-
             this.pokemons = allPokemons;
             this.pokemons.sort((a, b) => {
               return a.id - b.id;
             });
           })
           .finally(() => {
-            // this.loading = false
             this.toggle();
-
           });
-        // this.loading === false;
         resolve();
         reject('error');
       });
@@ -126,8 +121,9 @@ export default {
 
   },
   created() {
-    this.getAllTypes();
+    // this.getAllTypes();
     this.fetchData();
+    // this.fetchPokemonData();
   },
   mounted() {
     this.filterByTypes;
@@ -136,4 +132,5 @@ export default {
 </script>
 
 <style>
+
 </style>

@@ -10,6 +10,8 @@
               name: 'Pokemons',
               params: {
                 generationID: generation.id,
+                generationName: generation.name,
+                generationPokemonSpecies: generation.countSpecies
               }
             }">
               Mostra
@@ -17,11 +19,6 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Hover added -->
-    <div v-for="generation,i in generationsData" :key="i" class="list-group">
-      <a href="#" class="list-group-item list-group-item-action">{{generation}}</a>
     </div>
   </div>
 </template>
